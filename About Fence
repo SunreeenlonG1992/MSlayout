@@ -70,8 +70,75 @@ For Each a In dic.Keys
 Next
 
 myws.Range("A:A").AutoFit
+ 
+End Sub
+---------------------------------------------------------------
+Public Sub getFenceElements()
+   Dim oFence As Fence
+   Dim oElEnum As ElementEnumerator
+   Dim oEl As Element
    
+   
+Dim myexcel As excel.Application
+Dim mywb As excel.Workbook
+Dim myws As excel.Worksheet
+Dim i As Integer
+Dim dic As New Dictionary
+i = 1
+'
+'Set myexcel = New Excel.Application
+'Set mywb = myexcel.Workbooks.Open("D:\1111\sun.xlsx")
+'myexcel.Visible = True
+'Set myws = mywb.Worksheets(1)
+
+   
+   
+Set objDF = MicroStationDGN.ActiveDesignFile
+Set olevels = ActiveModelReference.Levels
+Set oscan = New ElementScanCriteria
+
+oscan.ExcludeAllTypes
+oscan.IncludeType msdElementTypeCellHeader
+
+
+Set oenum = ActiveModelReference.Scan(oscan)
+
+Do While oenum.MoveNext
+
+    Set ele = oenum.Current
+    Dim ocell As CellElement
+    
+    If ele.IsCellElement Then
+                Set ocell = ele.AsCellElement
+                
+            If Not dic.Exists(ocell.Origin.X) Then
+                   dic.Add ele.AsCellElement.Name, 1
+                   Debug.Print ocell.Origin.X
+                
+            ElseIf dic.Exists(ocell.Origin.X) Then
+                   dic.Item(ele.AsCellElement.Name) = dic.Item(ele.AsCellElement.Name) + 1
+                   Debug.Print ocell.Origin.X
+            End If
+            Debug.Print dic.Item(ele.AsCellElement.Name)
+
+    End If
+    
+Loop
+   
+'
+'Dim a
+'
+'
+'For Each a In dic.Keys
+'    myws.Cells(i, 1).Value = a
+'    myws.Cells(i, 2).Value = dic(a)
+'    i = i + 1
+'Next
+'
+'myws.Range("A:A").AutoFit
+'
    
    
 End Sub
+
 
