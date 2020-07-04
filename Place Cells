@@ -1,0 +1,43 @@
+Sub placecell()
+
+Dim ocell As CellElement
+'Dim opoint As Point3d
+
+
+Dim myexcel As excel.Application
+Dim mywb As excel.Workbook
+Dim myws As excel.Worksheet
+
+Set myexcel = GetObject(, "excel.application")
+Set mywb = myexcel.ActiveWorkbook
+Set myws = mywb.Worksheets(1)
+Debug.Print (myws.Name)
+
+
+Dim lastrow As Integer
+lastrow = myws.UsedRange.Rows.Count
+Dim a As Double
+Dim b As Double
+Dim op As Point3d
+Dim orotation As Matrix3d
+
+dangle = 30 * Pi / 180
+op.X = 0
+op.Y = 0
+op.Z = 1
+
+For i = 2 To lastrow
+
+orotation = Matrix3dFromVectorAndRotationAngle(op, dangle)
+a = CDbl(myws.Cells(i, 2).Value)
+b = CDbl(myws.Cells(i, 3).Value)
+'Set ocell = CreateCellElement3("1234", Point3dFromXY(a, b), False)
+Set ocell = CreateCellElement2("1234", Point3dFromXY(a, b), Point3dFromXYZ(1, 2, 1), False, orotation)
+ActiveModelReference.AddElement ocell
+ocell.Redraw
+ocell.Rewrite
+MsgBox ("ok")
+
+Next
+
+End Sub
