@@ -1,0 +1,185 @@
+Sub HelloWorld()
+
+'Dim myex As Excel.Application
+'Dim mywb As Excel.Workbook
+'Dim mysht As Worksheet
+'
+'Set myex = New Excel.Application
+'myex.Visible = True
+'Set mywb = myex.Workbooks.Open("C:\Users\lenovo\Downloads\111.xlsx")
+'Set mysht = mywb.Worksheets(1)
+'MsgBox mysht.Name
+
+
+
+
+Dim objDF As MicroStationDGN.DesignFile
+Dim oscan As ElementScanCriteria
+Dim oenum As ElementEnumerator
+Dim olevels As Levels
+Dim olevel As Level
+Dim ele As Element
+
+
+Dim myexcel As excel.Application
+Dim mywb As excel.Workbook
+Dim myws As excel.Worksheet
+Dim i As Integer
+Dim dic As New Dictionary
+
+
+i = 1
+
+Set myexcel = New excel.Application
+Set mywb = myexcel.Workbooks.Open("D:\1111\sun.xlsx")
+myexcel.Visible = True
+Set myws = mywb.Worksheets(1)
+
+
+
+
+Set objDF = MicroStationDGN.ActiveDesignFile
+Set olevels = ActiveModelReference.Levels
+Set oscan = New ElementScanCriteria
+
+oscan.ExcludeAllTypes
+oscan.IncludeType msdElementTypeCellHeader
+
+Debug.Print olevels.Count
+Set oenum = ActiveModelReference.Scan(oscan)
+
+'CadInputQueue.SendCommand "Mark"
+ShowStatus "sunrenlong"
+Do While oenum.MoveNext
+
+    Set ele = oenum.Current
+    Set olevel = ActiveModelReference.Levels(1)
+    If ele.IsCellElement Then
+      Debug.Print ele.AsCellElement.Name
+            If Not dic.Exists(ele.AsCellElement.Name) Then
+                   dic.Add ele.AsCellElement.Name, 1
+                
+            ElseIf dic.Exists(ele.AsCellElement.Name) Then
+                   dic.Item(ele.AsCellElement.Name) = dic.Item(ele.AsCellElement.Name) + 1
+                   'MsgBox dic.Item("Robot_KR210 R2700 extra")
+            End If
+            Debug.Print dic.Item(ele.AsCellElement.Name)
+                
+          
+          
+          
+'      myws.Cells(i, 1).Value = ele.AsCellElement.Name
+'      i = i + 1
+      
+'      If InStr(ele.AsCellElement.Name, "Robot_KR210 R2700 extra") Then
+'      ele.Level = ActiveModelReference.Levels("电控柜及桥架")
+'
+'      ele.Color = 3
+'      ele.Redraw
+'      ele.Rewrite
+'
+'      End If
+    End If
+    
+Loop
+    
+
+Dim a
+
+
+For Each a In dic.Keys
+    myws.Cells(i, 1).Value = a
+    myws.Cells(i, 2).Value = dic(a)
+    i = i + 1
+
+Next
+
+'myws.Columns.AutoFit
+myws.Range("A:A").AutoFit
+
+
+End Sub
+
+
+
+Sub sublist()
+
+
+
+
+Dim objDF As MicroStationDGN.DesignFile
+Dim oscan As ElementScanCriteria
+Dim oenum As ElementEnumerator
+Dim olevels As Levels
+Dim olevel As Level
+Dim ele As Element
+
+
+Dim myexcel As excel.Application
+Dim mywb As excel.Workbook
+Dim myws As excel.Worksheet
+Dim i As Integer
+i = 1
+Dim dic As New Dictionary
+
+
+Set myexcel = New excel.Application
+Set mywb = myexcel.Workbooks.Open("D:\1111\sun.xlsx")
+myexcel.Visible = True
+Set myws = mywb.Worksheets(1)
+
+
+
+
+Set objDF = MicroStationDGN.ActiveDesignFile
+Set olevels = ActiveModelReference.Levels
+Set oscan = New ElementScanCriteria
+
+oscan.ExcludeAllTypes
+oscan.IncludeType msdElementTypeCellHeader
+
+Debug.Print olevels.Count
+Set oenum = ActiveModelReference.Scan(oscan)
+
+ShowStatus "sunrenlong"
+Do While oenum.MoveNext
+
+    Set ele = oenum.Current
+    Set olevel = ActiveModelReference.Levels(1)
+    If ele.IsCellElement Then
+      Debug.Print ele.AsCellElement.Name
+            If Not dic.Exists(ele.AsCellElement.Name) Then
+                   dic.Add ele.AsCellElement.Name, 1
+                
+            ElseIf dic.Exists(ele.AsCellElement.Name) Then
+                   dic.Item(ele.AsCellElement.Name) = dic.Item(ele.AsCellElement.Name) + 1
+                   'MsgBox dic.Item("Robot_KR210 R2700 extra")
+            End If
+            Debug.Print dic.Item(ele.AsCellElement.Name)
+
+    End If
+    
+Loop
+    
+
+Dim a
+
+
+For Each a In dic.Keys
+    myws.Cells(i, 1).Value = a
+    myws.Cells(i, 2).Value = dic(a)
+    i = i + 1
+
+Next
+
+'myws.Columns.AutoFit
+myws.Range("A:A").AutoFit
+
+
+End Sub
+
+
+
+
+
+End Sub
