@@ -1,0 +1,77 @@
+Public Sub getFenceElements()
+   Dim oFence As Fence
+   Dim oElEnum As ElementEnumerator
+   Dim oEl As Element
+   Set oFence = ActiveDesignFile.Fence
+   If oFence.IsDefined Then
+      Set oElEnum = oFence.GetContents
+      oElEnum.Reset
+      While oElEnum.MoveNext
+         Set oEl = oElEnum.Current
+         'Change the color of the element
+         oEl.Color = 3
+         oEl.Redraw msdDrawingModeNormal
+         oEl.Rewrite
+      Wend
+   End If
+End Sub
+
+
+Public Sub getFenceElements111()
+   Dim oFence As Fence
+   Dim oElEnum As ElementEnumerator
+   Dim oEl As Element
+   
+   
+Dim myexcel As excel.Application
+Dim mywb As excel.Workbook
+Dim myws As excel.Worksheet
+Dim i As Integer
+Dim dic As New Dictionary
+i = 1
+
+Set myexcel = New excel.Application
+Set mywb = myexcel.Workbooks.Open("D:\1111\sun.xlsx")
+myexcel.Visible = True
+Set myws = mywb.Worksheets(1)
+
+   
+   
+   
+   Set oFence = ActiveDesignFile.Fence
+   If oFence.IsDefined Then
+      Set oElEnum = oFence.GetContents
+      oElEnum.Reset
+      While oElEnum.MoveNext
+      Set ele = oElEnum.Current
+                            If ele.IsCellElement Then
+                              Debug.Print ele.AsCellElement.Name
+                                    If Not dic.Exists(ele.AsCellElement.Name) Then
+                                           dic.Add ele.AsCellElement.Name, 1
+                                        
+                                    ElseIf dic.Exists(ele.AsCellElement.Name) Then
+                                           dic.Item(ele.AsCellElement.Name) = dic.Item(ele.AsCellElement.Name) + 1
+                                           'MsgBox dic.Item("Robot_KR210 R2700 extra")
+                                    End If
+                                    Debug.Print dic.Item(ele.AsCellElement.Name)
+                        
+                            End If
+      Wend
+   End If
+   
+   
+Dim a
+
+
+For Each a In dic.Keys
+    myws.Cells(i, 1).Value = a
+    myws.Cells(i, 2).Value = dic(a)
+    i = i + 1
+Next
+
+myws.Range("A:A").AutoFit
+   
+   
+   
+End Sub
+
