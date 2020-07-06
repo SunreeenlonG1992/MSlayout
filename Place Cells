@@ -1,9 +1,6 @@
 Sub placecell()
 
 Dim ocell As CellElement
-'Dim opoint As Point3d
-
-
 Dim myexcel As excel.Application
 Dim mywb As excel.Workbook
 Dim myws As excel.Worksheet
@@ -18,26 +15,37 @@ Dim lastrow As Integer
 lastrow = myws.UsedRange.Rows.Count
 Dim a As Double
 Dim b As Double
+Dim c As String
+Dim d As Integer
 Dim op As Point3d
 Dim orotation As Matrix3d
+Dim dangle As Double
 
-dangle = 30 * Pi / 180
 op.X = 0
 op.Y = 0
 op.Z = 1
 
 For i = 2 To lastrow
 
-orotation = Matrix3dFromVectorAndRotationAngle(op, dangle)
+dangle = (Round(myws.Cells(i, 6).Value, 2)) / 3.14 * Pi
 a = CDbl(myws.Cells(i, 2).Value)
 b = CDbl(myws.Cells(i, 3).Value)
+d = InStr(1, myws.Cells(i, 1).Value, "_____", vbTextCompare) + 5
+c = Mid(myws.Cells(i, 1).Value, d)
+
+
+orotation = Matrix3dFromVectorAndRotationAngle(op, dangle)
+
+
 'Set ocell = CreateCellElement3("1234", Point3dFromXY(a, b), False)
-Set ocell = CreateCellElement2("1234", Point3dFromXY(a, b), Point3dFromXYZ(1, 2, 1), False, orotation)
+Set ocell = CreateCellElement2(c, Point3dFromXY(a, b), Point3dFromXYZ(1, 1, 1), True, orotation)
 ActiveModelReference.AddElement ocell
 ocell.Redraw
 ocell.Rewrite
-MsgBox ("ok")
-
+Debug.Print (ocell.Name)
 Next
+
+
+ShowStatus "Over"
 
 End Sub
